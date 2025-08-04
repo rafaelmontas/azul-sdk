@@ -1,5 +1,16 @@
 # frozen_string_literal: true
 
+require_relative "azul/configuration"
+require_relative "azul/errors"
 require_relative "azul/version"
 
-module Azul; end
+module Azul
+  class << self
+    attr_accessor :configuration
+
+    def configure
+      @configuration ||= Configuration.new
+      yield(@configuration)
+    end
+  end
+end
