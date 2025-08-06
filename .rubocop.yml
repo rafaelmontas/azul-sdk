@@ -16,7 +16,22 @@ Naming/MemoizedInstanceVariableName:
   Enabled: false
 
 Naming/VariableNumber:
-  EnforcedStyle: snake_case
+  Enabled: false
 
 Style/SymbolArray:
   Enabled: false
+
+Style/WordArray:
+  Enabled: false
+
+Metrics/AbcSize:
+  Max: 25
+
+Layout/ElseAlignment:
+  Enabled: False
+
+Layout/EndAlignment:
+  Enabled: False
+
+Layout/IndentationWidth:
+  Enabled: False
