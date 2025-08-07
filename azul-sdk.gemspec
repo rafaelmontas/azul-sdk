@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.authors = ["Rafael Montas"]
   spec.email = ["rafaelmontas1@gmail.com"]
 
-  spec.summary = "Implementación de Webservices Azul."
-  spec.description = "Implementación de Webservices Azul."
+  spec.summary = "Implementación de Azul Webservices API."
+  spec.description = "Implementación de Azul Webservices API."
   spec.homepage = "https://github.com/rafaelmontas/azul-sdk"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.1.0"
