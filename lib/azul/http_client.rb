@@ -8,7 +8,7 @@ module Azul
     end
 
     def post(params = {}, action: nil)
-      required_params = { Channel: "EC", PosInputMode: "E-Commerce", Store: @config.merchant_id }
+      required_params = { "Channel": "EC", "PosInputMode": "E-Commerce", "Store": @config.merchant_id }
       api_url = @url_builder.build(action: action)
 
       perform_request(:post, api_url, params.merge(required_params))

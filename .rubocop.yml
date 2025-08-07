@@ -35,3 +35,6 @@ Layout/EndAlignment:
 
 Layout/IndentationWidth:
   Enabled: False
+
+Lint/SymbolConversion:
+  Enabled: false
