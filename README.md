@@ -1,6 +1,6 @@
 # Azul SDK
 
-Azul SDK provee acceso a la implementación de Webservices Azul.
+Azul SDK provee acceso a la implementación de Azul Webservices API para aplicaciones que utilizan Ruby como lenguaje de programación.
 
 ## Instalación
 
@@ -67,7 +67,7 @@ Los métodos definidos en esta librería permiten interactuar con los servicios 
 
 Esta es la transacción principal utilizada para someter una autorización de una tarjeta.
 
-Las ventas realizadas con la transacción “Sale” son capturadas automáticamente para su liquidación, por lo que sólo pueden ser anuladas con una transacción de “Void” en un lapso de no más de 20 minutos luego de recibir respuesta de aprobación (ver Método ProcessVoid).
+Las ventas realizadas con la transacción “Sale” son capturadas automáticamente para su liquidación, por lo que sólo pueden ser anuladas con una transacción de “Void” en un lapso de no más de 20 minutos luego de recibir respuesta de aprobación.
 
 Luego de transcurridos estos 20 minutos, la transacción será liquidada y se debe realizar una transacción de “Refund” o devolución para devolver los fondos a la tarjeta.
 
@@ -85,7 +85,7 @@ response = Azul::Payment.sale({
 
 Se puede separar la autorización del posteo o captura en dos mensajes distintos:
 
-- Hold: pre-autorización y reserva de los fondos en la tarjeta del cliente.
+- Hold: preautorización y reserva de los fondos en la tarjeta del cliente.
 - Post: se hace la captura o el “posteo” de la transacción.
 
 ```ruby
@@ -201,8 +201,8 @@ A través del objeto de respuesta `response.request` se puede acceder a los dato
 
 El objeto de requerimiento (request) contiene las siguientes propiedades:
 
-| Nombre | Tipo | Descripción | Ejemplo |
-| --- | --- | --- | --- |
+| Nombre | Tipo | Descripción |
+| --- | --- | --- |
 | api_url | `String` | URL del API al que se envió la solicitud. |
 | headers | `Hash` | Encabezados HTTP enviados en la solicitud. |
 | method | `Symbol` | Método HTTP utilizado en la solicitud. |
@@ -257,3 +257,92 @@ rescue Azul::ApiError => e
 end
 ```
 
+## Mapeo de Parámetros
+
+La siguiente tabla muestra el mapeo entre los parámetros utilizados en esta librería y los esperados por el API de Azul:
+
+| Parámetro Ruby | Parámetro API | Tipo | Descripción |
+| --- | --- | --- | --- |
+| `card_number` | `CardNumber` | `String` | Número de tarjeta a la cual se le ha de cargar la transacción |
+| `expiration` | `Expiration` | `String` | Fecha expiración/vencimiento de la tarjeta (formato: YYYYMM) |
+| `cvc` | `CVC` | `String` | Código de seguridad de la tarjeta (CVV2 o CVC) |
+| `amount` | `Amount` | `String` | Monto total de la transacción (Impuestos incluidos) en centavos |
+| `itbis` | `Itbis` | `String` | Valor del ITBIS en centavos |
+| `trx_type` | `TrxType` | `String` | Tipo de transacción (Sale, Hold, Refund) |
+| `order_number` | `OrderNumber` | `String` | Número de orden asociado a la transacción |
+| `customer_service_phone` | `CustomerServicePhone` | `String` | Número de servicio para atención telefónica del establecimiento |
+| `ecommerce_url` | `ECommerceURL` | `String` | Dirección web del afiliado |
+| `custom_order_id` | `CustomOrderId` | `String` | Número identificador dado por el afiliado a la transacción |
+| `alt_merchant_name` | `AltMerchantName` | `String` | Nombre más descriptivo para que el tarjetahabiente pueda identificar en su estado de cuenta |
+| **`apple_pay`** | **`ApplePay`** | **`String`** | **Indica si se usa Apple Pay** |
+| └─ `payment_token` | `PaymentToken` | `String` | Token de pago |
+| `cryptogram` | `Cryptogram` | `String` | Criptograma para pagos tokenizados |
+| `eci_indicator` | `ECIIndicator` | `String` | Indicador ECI (Electronic Commerce Indicator) |
+| **`google_pay`** | **`GooglePay`** | **`String`** | **Indica si se usa Google Pay** |
+| └─ `payment_token` | `PaymentToken` | `String` | Token de pago |
+| `data_vault_token` | `DataVaultToken` | `String` | Token generado por Azul para transacciones con token |
+| `save_to_data_vault` | `SaveToDataVault` | `String` | Valores posibles 1 = si, 0 = no. Para generar token |
+| `force_no_3ds` | `ForceNo3DS` | `String` | Valores posibles 0 = no, 1 = si. Fuerza transacción sin 3D Secure |
+| **`three_ds_auth`** | **`ThreeDSAuth`** | **`Hash`** | **Parámetros de autenticación 3D Secure** |
+| ├─ `term_url` | `TermUrl` | `String` | URL de retorno después de 3D Secure |
+| ├─ `method_notification_url` | `MethodNotificationUrl` | `String` | URL de notificación del método 3D Secure |
+| └─ `requestor_challenge_indicator` | `RequestorChallengeIndicator` | `String` | Indicador de desafío del solicitante |
+| **`card_holder_info`** | **`CardHolderInfo`** | **`Hash`** | **Información del tarjetahabiente** |
+| ├─ `name` | `Name` | `String` | Nombre del tarjetahabiente |
+| ├─ `email` | `Email` | `String` | Email del tarjetahabiente |
+| └─ `phone_mobile` | `PhoneMobile` | `String` | Teléfono móvil del tarjetahabiente |
+| **`browser_info`** | **`BrowserInfo`** | **`Hash`** | **Información del navegador** |
+| ├─ `accept_header` | `AcceptHeader` | `String` | Encabezado Accept del navegador |
+| ├─ `ip_address` | `IPAddress` | `String` | Dirección IP del cliente |
+| ├─ `user_agent` | `UserAgent` | `String` | User Agent del navegador |
+| ├─ `language` | `Language` | `String` | Idioma del navegador |
+| ├─ `color_depth` | `ColorDepth` | `String` | Profundidad de color de la pantalla |
+| ├─ `screen_width` | `ScreenWidth` | `String` | Ancho de pantalla en píxeles |
+| ├─ `screen_height` | `ScreenHeight` | `String` | Alto de pantalla en píxeles |
+| ├─ `time_zone` | `TimeZone` | `String` | Zona horaria del navegador |
+| └─ `javascript_enable` | `JavaScriptEnable` | `String` | Indica si JavaScript está habilitado |
+| `method_notification_status` | `MethodNotificationStatus` | `String` | Estado de notificación del método 3D Secure |
+| `cres` | `CRes` | `String` | Respuesta del desafío (Challenge Response) de 3D Secure |
+| `original_date` | `OriginalDate` | `String` | Fecha de la transacción original (formato: YYYYMMDD) |
+| `original_trx_ticket_nr` | `OriginalTrxTicketNr` | `String` | Número de ticket de la transacción original |
+| `azul_order_id` | `AzulOrderId` | `String` | ID de orden generado por Azul |
+| `response_code` | `ResponseCode` | `String` | Código de respuesta de la transacción |
+| `rrn` | `RRN` | `String` | Número de referencia (Reference Referral Number) |
+| `date_from` | `DateFrom` | `String` | Fecha inicial para búsqueda de transacciones |
+| `date_to` | `DateTo` | `String` | Fecha final para búsqueda de transacciones |
+| `acquirer_ref_data` | `AcquirerRefData` | `String` | Uso interno Azul. Valor fijo: 1 |
+
+### Uso de parámetros anidados
+
+Para los parámetros de tipo `Hash` (`three_ds_auth`, `card_holder_info`, `browser_info`, `apple_pay`, `google_pay`), se deben pasar los valores anidados como un hash:
+
+```ruby
+response = Azul::Payment.sale({
+  card_number: "411111******1111",
+  expiration: "202812",
+  cvc: "123",
+  amount: 100000,
+  itbis: 18000,
+  three_ds_auth: {
+    term_url: "https://example.com/return",
+    method_notification_url: "https://example.com/notify",
+    requestor_challenge_indicator: "01"
+  },
+  card_holder_info: {
+    name: "Juan Pérez",
+    email: "juan@example.com",
+    phone_mobile: "8095551234"
+  },
+  browser_info: {
+    accept_header: "text/html",
+    ip_address: "192.168.1.1",
+    user_agent: "Mozilla/5.0...",
+    language: "es-ES",
+    color_depth: "24",
+    screen_width: "1920",
+    screen_height: "1080",
+    time_zone: "-240",
+    javascript_enable: "1"
+  }
+})
+```
